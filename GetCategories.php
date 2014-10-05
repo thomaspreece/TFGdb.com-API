@@ -365,6 +365,32 @@ if($Content == 1){
 }
 
 
+if($Content == 1){
+	echo "
+<sorts>
+		<item>
+			<ID>0</ID>
+			<Name>Sort by Name</Name>
+		</item>
+		<item>
+			<ID>1</ID>
+			<Name>Sort by Rating(Worst First)</Name>
+		</item>
+		<item>
+			<ID>2</ID>
+			<Name>Sort by Rating(Best First)</Name>
+		</item>
+		<item>
+			<ID>3</ID>
+			<Name>Sort by Recently Added</Name>
+		</item>		
+</sorts>
+	";
+}elseif($Content == 2){
+
+}
+
+
 
 if($Content == 1){
 	echo "</categories>";
