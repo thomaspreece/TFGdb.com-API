@@ -1,4 +1,5 @@
-<?php		
+<?php	
+$PageName = "API-Search.php";
 include("./../Includes/HeaderFunctions.php");
 
 //$Content	0 - Error
@@ -65,7 +66,7 @@ if (isset($_CLEANREQUEST["Letter"]) && $_CLEANREQUEST["Letter"] != ""){
 	$SearchLine = $SearchLine." Name LIKE '".$_CLEANREQUEST["Letter"]."%' AND";
 }else{					
 	if (isset($_CLEANREQUEST["Search"])  && $_CLEANREQUEST["Search"] != "" && strlen($_CLEANREQUEST["Search"])>1){
-			$SearchLine = $SearchLine." (Name LIKE '%".$_CLEANREQUEST["Search"]."%' OR About LIKE '%".$_CLEANREQUEST["Search"]."%') AND";
+			$SearchLine = $SearchLine." Name LIKE '%".$_CLEANREQUEST["Search"]."%' AND";
 	}else{
 
 	}
@@ -180,46 +181,3 @@ if($Content == 1){
 }	
 				
 ?>
-
-<!--
-
-
-$ModeArray = array();
-$GenreArray = array();
-$PlatformArray = array();
-foreach($_CLEANREQUEST as $key => $value){
-	if($value=='on'){
-		if(substr($key,0,4)=='Mode'){
-			$ModeArray[] = substr($key,4);
-		}elseif(substr($key,0,3)=='Gen'){
-			$GenreArray[] = substr($key,3);
-		}elseif(substr($key,0,4)=='Plat'){
-			$PlatformArray[] = substr($key,4);
-		}				
-	}
-}
-
-$ModeLine = "";
-foreach($ModeArray as $temp){
-	$ModeLine = $ModeLine." ModeBITS & ".$temp." OR";
-}
-if($ModeLine!=""){
-	$SearchLine = $SearchLine."(".substr($ModeLine,0,-3).") AND";
-}
-
-$GenreLine = "";
-foreach($GenreArray as $temp){
-	$GenreLine = $GenreLine." GenreBITS & ".$temp." OR";
-}
-if($GenreLine!=""){
-	$SearchLine = $SearchLine."(".substr($GenreLine,0,-3).") AND";
-}		
-
-$PlatformLine = "";
-foreach($PlatformArray as $temp){
-	$PlatformLine = $PlatformLine." PlatformBITS & ".$temp." OR";
-}
-if($PlatformLine!=""){
-	$SearchLine = $SearchLine."(".substr($PlatformLine,0,-3).") AND";
-}	
--->
