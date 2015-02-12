@@ -1,11 +1,14 @@
 <?php	
+# Dumps all the content of game with specified ID 
+# Expects a GET variable of ContentType=JSON or ContentType=XML depending on what output you want. Also expects ID of game data you want to retrieve. ID's of games can be found using Search.php
+
 $PageName = "API-Search.php";
+# Include basic functions used on site and database
 include("./../Includes/HeaderFunctions.php");
 
-//$Content	0 - Error
-//			1 - PHP
-//			2 - JSON	
-
+# Sets $Content variable:	0 - Error
+#							1 - PHP
+#							2 - JSON	
 if(isset($_GET['ContentType'])){
 	if ($_GET['ContentType']=="JSON"){
 		$Content = 2;
@@ -18,6 +21,8 @@ if(isset($_GET['ContentType'])){
 	$Content = 0;
 }
 
+
+# Send relevant content headers for requested return content type
 if($Content == 1){
 	header('Content-type: text/xml');
 	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -35,12 +40,13 @@ if($Content == 1){
 		
 $SearchLine = "WHERE";
 
+# Perform a clean up on user input to remove harmful content
 $_CLEANREQUEST = array();
-
 foreach($_GET as $key => $value){
 	$_CLEANREQUEST[addslashes(htmlspecialchars($key,ENT_QUOTES))] = addslashes(htmlspecialchars($value,ENT_QUOTES));
 }
 
+#Generate Search Query
 if (isset($_CLEANREQUEST["Mode"]) && $_CLEANREQUEST["Mode"] != ""){
 	$SearchLine = $SearchLine." ModeBITS & ".intval($_CLEANREQUEST["Mode"])." AND";
 }
@@ -103,8 +109,6 @@ if (isset($_CLEANREQUEST["Source"]) && $_CLEANREQUEST["Source"] != ""){
 
 }
 
-
-
 if (isset($_CLEANREQUEST["Studio"]) && $_CLEANREQUEST["Studio"] != ""){
 	
 	foreach($GAMESTUDIOS as $temp){
@@ -116,10 +120,8 @@ if (isset($_CLEANREQUEST["Studio"]) && $_CLEANREQUEST["Studio"] != ""){
 }	
 
 $SearchLine = $SearchLine." `QuedTodaysGame`=0";						
-		
-if (isset($_CLEANREQUEST["Sort"])){
-
 	
+if (isset($_CLEANREQUEST["Sort"])){
 	if($_CLEANREQUEST["Sort"]==1){
 		$SearchLine = $SearchLine." ORDER BY Rating, RateNum ";							
 	}elseif($_CLEANREQUEST["Sort"]==2){
@@ -133,9 +135,11 @@ if (isset($_CLEANREQUEST["Sort"])){
 	$SearchLine = $SearchLine." ORDER BY Name ";
 }
 
+# Perform Search 
 $GameSearch = $Gamedb->prepare("SELECT * FROM freegames ".$SearchLine);
 $GameSearch->execute();
 
+# Output results
 while($row = $GameSearch->fetch(PDO::FETCH_ASSOC)){
 
 	$Desc = $row['About'];
@@ -172,6 +176,7 @@ while($row = $GameSearch->fetch(PDO::FETCH_ASSOC)){
 	} 
 }
 
+# Finish content with relevant ending tags for content type
 if($Content == 1){
 	echo "
 </Data>";
