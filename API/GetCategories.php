@@ -1,10 +1,15 @@
 <?php		
+# Dumps a list of options for various valid categories that can be used to filter results in Search.php
+# Expects a GET variable of ContentType=JSON or ContentType=XML depending on what output you want.
+
+$PageName = "API-GetCategories.php";
+# Include basic functions used on site and database
 include("./../Includes/HeaderFunctions.php");
 
-//$Content	0 - Error
-//			1 - PHP
-//			2 - JSON	
 
+# Sets $Content variable:	0 - Error
+#							1 - PHP
+#							2 - JSON	
 if(isset($_GET['ContentType'])){
 	if ($_GET['ContentType']=="JSON"){
 		$Content = 2;
@@ -17,6 +22,8 @@ if(isset($_GET['ContentType'])){
 	$Content = 0;
 }
 
+
+# Send relevant content headers for requested return content type
 if($Content == 1){
 	header('Content-type: text/xml');
 	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -31,7 +38,8 @@ if($Content == 1){
 	die;
 }
 
-#----------------------------------Mode----------------------------------
+
+# Dump valid Mode category options
 if($Content == 1){
 	echo "<modes>";
 }elseif($Content == 2){
@@ -72,7 +80,7 @@ if($Content == 1){
 	";
 }
 
-#----------------------------------genre----------------------------------
+# Dump valid Genre category options
 if($Content == 1){
 	echo "<genres>";
 }elseif($Content == 2){
@@ -113,7 +121,7 @@ if($Content == 1){
 	";
 }
 
-#----------------------------------Platform----------------------------------
+# Dump valid Platform category options
 if($Content == 1){
 	echo "<platforms>";
 }elseif($Content == 2){
@@ -156,7 +164,7 @@ if($Content == 1){
 
 
 
-#----------------------------------source----------------------------------
+# Dump valid Source category options
 if($Content == 1){
 	echo "<sources>";
 }elseif($Content == 2){
@@ -199,7 +207,7 @@ if($Content == 1){
 
 
 
-#----------------------------------graphics----------------------------------
+# Dump valid Graphics category options
 if($Content == 1){
 	echo "<graphics>";
 }elseif($Content == 2){
@@ -241,7 +249,7 @@ if($Content == 1){
 }
 
 
-#----------------------------------studio----------------------------------
+# Dump valid Studio category options
 if($Content == 1){
 	echo "<studios>";
 }elseif($Content == 2){
@@ -282,7 +290,7 @@ if($Content == 1){
 	";
 }
 
-#----------------------------------types----------------------------------
+# Dump valid Type category options
 if($Content == 1){
 	echo "<types>";
 }elseif($Content == 2){
@@ -323,7 +331,7 @@ if($Content == 1){
 	";
 }
 
-#----------------------------------release----------------------------------
+# Dump valid Release category options
 if($Content == 1){
 	echo "<releases>";
 }elseif($Content == 2){
@@ -391,7 +399,7 @@ if($Content == 1){
 }
 
 
-
+# Finish content with relevant ending tags for content type
 if($Content == 1){
 	echo "</categories>";
 }elseif($Content == 2){

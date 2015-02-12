@@ -1,11 +1,14 @@
 <?php		
+# Dumps all the content of game with specified ID 
+# Expects a GET variable of ContentType=JSON or ContentType=XML depending on what output you want. Also expects ID of game data you want to retrieve. ID's of games can be found using Search.php
+
 $PageName = "API-GetGame.php";
+# Include basic functions used on site and database
 include("./../Includes/HeaderFunctions.php");
 
-//$Content	0 - Error
-//			1 - PHP
-//			2 - JSON	
-
+# Sets $Content variable:	0 - Error
+#							1 - PHP
+#							2 - JSON	
 if(isset($_GET['ContentType'])){
 	if ($_GET['ContentType']=="JSON"){
 		$Content = 2;
@@ -18,6 +21,7 @@ if(isset($_GET['ContentType'])){
 	$Content = 0;
 }
 
+#Check ID is specified and is a number
 if(isset($_GET['ID']) && intval($_GET['ID']) != 0){
 
 }else{
@@ -26,6 +30,7 @@ if(isset($_GET['ID']) && intval($_GET['ID']) != 0){
 	die;
 }
 
+# Send relevant content headers for requested return content type
 if($Content == 1){
 	header('Content-type: text/xml');
 	echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -41,19 +46,22 @@ if($Content == 1){
 }
 		
 
-
+# Perform a clean up on user input to remove harmful content
 $_CLEANREQUEST = array();
-
 foreach($_GET as $key => $value){
 	$_CLEANREQUEST[addslashes(htmlspecialchars($key,ENT_QUOTES))] = addslashes(htmlspecialchars($value,ENT_QUOTES));
 }
 
+#Look in database for game with ID specified
 $stmt = $Gamedb->prepare("SELECT * FROM freegames WHERE ID=:id");
 $stmt->bindValue(':id', $_CLEANREQUEST["ID"], PDO::PARAM_INT);
 $stmt->execute();
 $GameInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
 if($GameInfo){
+	#Get game data and output it
+	#NOTE: Section is inefficient, could be much more efficient by using SQL Join instead of separate queries.
 	$Genre = "";
 	$Graphics = "";
 	$Source = "";
@@ -377,7 +385,7 @@ if($GameInfo){
 	}
 }
 
-
+# Finish content with relevant ending tags for content type
 if($Content == 1){
 	echo "</Data>";
 }elseif($Content == 2){
